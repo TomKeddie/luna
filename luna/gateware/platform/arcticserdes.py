@@ -140,10 +140,14 @@ class ArcticSerdes35Platform(Xilinx7SeriesPlatform, LUNAPlatform):
     resources   = [
         Resource("clkin", 0, DiffPairs("Y18", "Y19", dir="i"),
                  Clock(50e6),
-                 Attrs(IOStandard="LVDS_25"),
+                 Attrs(IOSTANDARD="LVDS_25"),
         ),
-        RGBLEDResource(0, r="P15", g="P16", b="P14", invert=True, attrs=Attrs(IOStandard="LVCMOS33")),
-        DirectUSBResource("usb_micro", 0, d_p="V18", d_n="V19", pullup="U18", attrs=Attrs(IOStandard="LVCMOS33")),
+        RGBLEDResource(0, r="P15", g="P16", b="P14", invert=True, attrs=Attrs(IOSTANDARD="LVCMOS33")),
+        *LEDResources(pins="P15 P16 P14", invert=True, attrs=Attrs(IOSTANDARD="LVCMOS33")),
+        *ButtonResources(pins="U17", invert=True, attrs=Attrs(IOSTANDARD="LVCMOS33")),
+        DirectUSBResource("usb_micro", 0, d_p="V18", d_n="V19", pullup="U18", attrs=Attrs(IOSTANDARD="LVCMOS33")),
+        DirectUSBResource("usb_a",     0, d_p="P19", d_n="R19", pullup="P20", attrs=Attrs(IOSTANDARD="LVCMOS33")),
+
         UARTResource(0,
             rx="W19", tx="V17",
             attrs=Attrs(IOSTANDARD="LVCMOS33")
@@ -154,7 +158,12 @@ class ArcticSerdes35Platform(Xilinx7SeriesPlatform, LUNAPlatform):
         ),
     ]
 
-    connectors = []
+    connectors = [
+        Connector("j1_35", 0, "A1 B1 D1 E1 F1 G1 J2 K2 J1 K1 L1 M1 N2 P2"),
+        Connector("j1_34", 0, "R2 R3 U1 T1 V2 U2 Y1 W1 Y2 W2 AB1 AA1 AB2 AB3"),
+        Connector("j2_14", 0, "AB18 AA18 AB20 AA19 AB22 AB21 AA21 AA20 Y22 Y21 W22 W21 U21 T21"),
+        Connector("j2_16", 0, "G22 G21 D22 E22 B22 C22 A21 B21 B17 B18 A19 A18 A15 A16"),
+    ]
 
 
     def toolchain_prepare(self, fragment, name, **kwargs):
